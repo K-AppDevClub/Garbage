@@ -76,16 +76,12 @@
           <thead>
             <tr>
               <th width="50" v-for="week in weeks">{{week}}</th>
-              <!-- <th v-repeat="week in weeks">{{week}}</th> -->
             </tr>
           </thead>
           <tbody>
             <tr v-for="week in calendar">
-              <td v-for="day in week">{{day.day}}</td>
+              <td v-for="day in week" tappable @click="$router.push({name:'detail', params:{year: calData.year, month:getMonthName(calData.month), day: day.day}})">{{day.day}}</td>
             </tr>
-            <!-- <tr v-repeat="week: calendar">
-              <td v-repeat="day: week">{{day.day}}</td>
-            </tr> -->
           </tbody>
         </table>
         </div>
@@ -123,6 +119,17 @@ export default {
   components: {
     LoadingIndicator,
     Navbar,
+  },
+  params: {
+    year: {
+      default: null
+    },
+    month: {
+      default: null
+    },
+    day: {
+      default: null
+    }
   },
   methods: {
     getMonthName: function(month) {
@@ -172,10 +179,6 @@ export default {
     return {
       weeks: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       calData: {year: 0, month: 0},
-      users: [
-        { name: 'Foo Bar', email: 'foo@bar.com' },
-        { name: 'John Doh', email: 'john@doh.com' }
-      ],
       postdata: {
         document: {  
           type:"PLAIN_TEXT",
