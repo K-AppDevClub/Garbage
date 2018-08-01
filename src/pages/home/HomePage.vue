@@ -187,14 +187,18 @@ export default {
         encodingType: 'UTF8'
       },
       res_data:[],
-      sentiment_score: 0
-
+      sentiment_score: 0,
+      results: [],
     };
   },
   created() {
     var date = new Date();
     this.calData.year = date.getFullYear();
     this.calData.month = date.getMonth() + 1;
+  },
+  mounted() {
+    this.results = require("../../json/garbage.json");
+    console.log(this.results);
   },
   computed: {
     calendar () {
