@@ -98,6 +98,9 @@
         <div class="clear_buttom">
           <v-ons-button style="background-color:rgb(156, 20, 20)" @click="textClear()">クリア</v-ons-button>
         </div>
+        <div class="g_buttom">
+          <v-ons-button  @click="separate()">分別</v-ons-button>
+        </div>
       </div>
       <div>
         <p>点数！</p>
@@ -164,7 +167,6 @@ export default {
           this.sending = false
           throw error
       })
-
     },
     textClear(){
       this.postdata.document.content = "" 
@@ -172,6 +174,13 @@ export default {
     },
     page(){
       this.$router.push({ name: 'sentiment'}); 
+    },
+    separate(){
+      for (var g_data in this.results){
+        if (this.results[g_data].name == 'アイロン台'){
+          console.log(this.results[g_data].name)
+        }
+      }
     }
   },
 
