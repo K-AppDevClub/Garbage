@@ -89,34 +89,24 @@
     </v-ons-card>
     <v-ons-card>
       <v-ons-list-item>
-        <textarea style="width:100%;height:90px" name="code_ireru" v-model='postdata.document.content' placeholder="文章を入力"></textarea>
+        <textarea style="width:100%;height:90px" name="code_ireru" v-model="gomidata" placeholder="分別したいゴミ"></textarea>
       </v-ons-list-item>
+     
       <div id = "buttom_area">
-        <div class="analyze_buttom">
-          <v-ons-button  @click="go()">感情分析</v-ons-button>
+        <div class="g_buttom">
+          <v-ons-button  @click="separate()">分別</v-ons-button>
         </div>
         <div class="clear_buttom">
           <v-ons-button style="background-color:rgb(156, 20, 20)" @cick="textClear()">クリア</v-ons-button>
         </div>
-      <v-ons-list-item>
-        <textarea style="width:100%;height:90px" name="code_ireru" v-model="gomidata" placeholder="文章を入力"></textarea>
-      </v-ons-list-item>
-      <div class="g_buttom">
-        <v-ons-button  @click="separate()">分別</v-ons-button>
-      </div>
       </div>
       <div>
-        <p>点数！</p>
-        <p>{{sentiment_score}}</p>
+        <p>検索結果</p>
         <p>{{this.gomidata}}</p>
         <p>{{result_type}}</p>
         <p>¥{{result_value}}</p>
-
-      
       </div>
-      
   </v-ons-card>
-  <v-ons-button @click="page()">ページ遷移 </v-ons-button>
   </v-ons-page>
 </template>
 
@@ -165,24 +155,10 @@ export default {
           this.calData.month++;
       }
     },
-    go(){
-      this.axios.post('https://language.googleapis.com/v1/documents:analyzeSentiment?key=AIzaSyDzdTDDNFQ9STkA1bfGEcUnlxgpvFLrEL0',this.postdata)
-      .then((res) => {
-        console.log(res);
-        this.sentiment_score = res.data.documentSentiment.score  * 100
-      })
-      .catch(error => {
-          this.sending = false
-          throw error
-      })
-    },
     textClear(){
       this.postdata.document.content = "" 
       this.postdata.document.garbage = "" 
       this.sentiment_score = 0
-    },
-    page(){
-      this.$router.push({ name: 'sentiment'}); 
     },
     separate(){
       
@@ -205,14 +181,6 @@ export default {
       gomidata: '',
       result_type: '',
       result_value: 0,
-      postdata: {
-        document: {  
-          type:"PLAIN_TEXT",
-        　content:"あなたのことが大好きだ"
-        },
-        encodingType: 'UTF8'
-      },
-      res_data:[],
       sentiment_score: 0,
       results: [],
     };
