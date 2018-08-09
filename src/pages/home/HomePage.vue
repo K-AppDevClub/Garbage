@@ -96,15 +96,23 @@
           <v-ons-button  @click="go()">感情分析</v-ons-button>
         </div>
         <div class="clear_buttom">
-          <v-ons-button style="background-color:rgb(156, 20, 20)" @click="textClear()">クリア</v-ons-button>
+          <v-ons-button style="background-color:rgb(156, 20, 20)" @cick="textClear()">クリア</v-ons-button>
         </div>
-        <div class="g_buttom">
-          <v-ons-button  @click="separate()">分別</v-ons-button>
-        </div>
+      <v-ons-list-item>
+        <textarea style="width:100%;height:90px" name="code_ireru" v-model="gomidata" placeholder="文章を入力"></textarea>
+      </v-ons-list-item>
+      <div class="g_buttom">
+        <v-ons-button  @click="separate()">分別</v-ons-button>
+      </div>
       </div>
       <div>
         <p>点数！</p>
         <p>{{sentiment_score}}</p>
+        <p>{{this.gomidata}}</p>
+        <p>{{result_type}}</p>
+        <p>¥{{result_value}}</p>
+
+      
       </div>
       
   </v-ons-card>
@@ -170,15 +178,21 @@ export default {
     },
     textClear(){
       this.postdata.document.content = "" 
+      this.postdata.document.garbage = "" 
       this.sentiment_score = 0
     },
     page(){
       this.$router.push({ name: 'sentiment'}); 
     },
     separate(){
+      
       for (var g_data in this.results){
-        if (this.results[g_data].name == 'アイロン台'){
-          console.log(this.results[g_data].name)
+        if (this.results[g_data].name == this.gomidata){
+          console.log(this.results[g_data].name);
+          console.log(this.results[g_data].type);
+          console.log(this.results[g_data].value);
+          this.result_type = this.results[g_data].type
+          this.result_value = this.results[g_data].value
         }
       }
     }
@@ -188,10 +202,13 @@ export default {
     return {
       weeks: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       calData: {year: 0, month: 0},
+      gomidata: '',
+      result_type: '',
+      result_value: 0,
       postdata: {
         document: {  
           type:"PLAIN_TEXT",
-        　content:"あなたのことが大好きだ" 
+        　content:"あなたのことが大好きだ"
         },
         encodingType: 'UTF8'
       },
