@@ -66,7 +66,7 @@
       <div id="calendar-nav">
         <i class="zmdi zmdi-comment-outline" tappable @click="moveLastMonth"></i>
         <span>{{calData.year}} - {{getMonthName(calData.month)}}</span>
-        <i class="zmdi zmdi-comment-outline" tappable @click="moveNextMonth"></i>
+        <!-- <i class="zmdi zmdi-comment-outline" tappable @click="moveNextMonth"></i> -->
       </div>
       <br>
 
@@ -88,23 +88,18 @@
       </div>
     </v-ons-card>
     <v-ons-card>
-      <v-ons-list-item>
-        <textarea style="width:100%;height:90px" name="code_ireru" v-model="gomidata" placeholder="分別したいゴミ"></textarea>
-      </v-ons-list-item>
-     
+      <v-ons-input style="width:80%;margin:auto" name="code_ireru" v-model="gomidata" placeholder="分別したいゴミ"></v-ons-input>
       <div id = "buttom_area">
-        <div class="g_buttom">
-          <v-ons-button  @click="separate()">分別</v-ons-button>
-        </div>
         <div class="clear_buttom">
-          <v-ons-button style="background-color:rgb(156, 20, 20)" @cick="textClear()">クリア</v-ons-button>
+          <v-ons-button style="background-color:rgb(156, 20, 20)" @click="textClear()">クリア</v-ons-button>
         </div>
       </div>
       <div>
-        <p>検索結果</p>
-        <p>{{this.gomidata}}</p>
-        <p>{{result_type}}</p>
-        <p>¥{{result_value}}</p>
+        <p>検索結果：{{this.gomidata}}</p>
+        <p></p>
+        <p v-if="separate.type != 'データがありません'">{{separate.type}}</p>
+        <p v-if="separate.cost != 'データがありません'">¥{{separate.cost}}</p>
+        <p v-else>”{{this.gomidata}}”は登録されていません</p>
       </div>
   </v-ons-card>
   </v-ons-page>
@@ -156,22 +151,8 @@ export default {
       }
     },
     textClear(){
-      this.postdata.document.content = "" 
-      this.postdata.document.garbage = "" 
-      this.sentiment_score = 0
+      this.gomidata = ''
     },
-    separate(){
-      
-      for (var g_data in this.results){
-        if (this.results[g_data].name == this.gomidata){
-          console.log(this.results[g_data].name);
-          console.log(this.results[g_data].type);
-          console.log(this.results[g_data].value);
-          this.result_type = this.results[g_data].type
-          this.result_value = this.results[g_data].value
-        }
-      }
-    }
   },
 
   data() {
@@ -180,9 +161,10 @@ export default {
       calData: {year: 0, month: 0},
       gomidata: '',
       result_type: '',
-      result_value: 0,
+      result_cost: 0,
       sentiment_score: 0,
       results: [],
+      result: [],
     };
   },
   created() {
@@ -195,6 +177,25 @@ export default {
     console.log(this.results);
   },
   computed: {
+    separate(){
+      for (var g_data in this.results){
+        if (this.results[g_data].name == this.gomidata){
+          console.log(this.results[g_data].name);
+          console.log(this.results[g_data].type);
+          console.log(this.results[g_data].cost);
+          this.result_type = this.results[g_data].type
+          this.result_cost = this.results[g_data].cost
+          break;
+        }
+        else{
+          this.result_type = 'データがありません'
+          this.result_cost = 'データがありません'
+        }
+      }
+      this.result = {type: this.result_type, cost: this.result_cost}
+      return this.result
+      // return this.result_type;
+    },
     calendar () {
       // 1日の曜日
       var firstDay = new Date(this.calData.year, this.calData.month - 1, 1).getDay();
