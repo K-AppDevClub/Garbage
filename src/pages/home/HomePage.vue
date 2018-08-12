@@ -41,21 +41,18 @@
 }
 .calendar {
   text-align: center;
-  // width: 500px;
-  // margin: 0 auto;
 }
 .child_calendar {
   display: inline-block;
-}
-#buttom_area{
-  text-align: center;
-  margin-top: 10px;
 }
 .analyze_buttom{
   display: inline-block;
 }
 .clear_buttom{
   display: inline-block;
+}
+.research{
+  text-align: center;
 }
 </style>
 
@@ -64,9 +61,9 @@
     <navbar></navbar>
     <v-ons-card modifier="material">
       <div id="calendar-nav">
-        <i class="zmdi zmdi-comment-outline" tappable @click="moveLastMonth"></i>
+        <i class="zmdi zmdi-arrow-left" tappable @click="moveLastMonth"></i>
         <span>{{calData.year}} - {{getMonthName(calData.month)}}</span>
-        <!-- <i class="zmdi zmdi-comment-outline" tappable @click="moveNextMonth"></i> -->
+        <i class="zmdi zmdi-arrow-right" tappable @click="moveNextMonth"></i>
       </div>
       <br>
 
@@ -88,11 +85,9 @@
       </div>
     </v-ons-card>
     <v-ons-card>
-      <v-ons-input style="width:80%;margin:auto" name="code_ireru" v-model="gomidata" placeholder="分別したいゴミ"></v-ons-input>
-      <div id = "buttom_area">
-        <div class="clear_buttom">
-          <v-ons-button style="background-color:rgb(156, 20, 20)" @click="textClear()">クリア</v-ons-button>
-        </div>
+      <div class="research">
+        <v-ons-input style="width:70%;margin:auto" name="code_ireru" v-model="gomidata" placeholder="分別したいゴミ"></v-ons-input>
+        <span><v-ons-button style="background-color:rgb(156, 20, 20)" @click="textClear()">クリア</v-ons-button></span>
       </div>
       <div>
         <p>検索結果：{{this.gomidata}}</p>
