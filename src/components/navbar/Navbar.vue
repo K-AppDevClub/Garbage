@@ -15,9 +15,9 @@
 <template>
   <v-ons-toolbar class="home-toolbar">
     <div v-if="navType=='menu'" class="left">
-      <v-ons-toolbar-button @click="toggleMenu()">
+      <!-- <v-ons-toolbar-button @click="toggleMenu()">
         <v-ons-icon icon="ion-navicon, material:md-menu"></v-ons-icon>
-      </v-ons-toolbar-button>
+      </v-ons-toolbar-button> -->
     </div>
     <div v-else-if="navType=='back'" class="left">
       <!-- <v-ons-button>戻る</v-ons-button> -->
@@ -31,7 +31,7 @@ export default {
   name: 'navbar',
   props: {
     msg: {
-      default: 'タイトル',
+      default: 'ゴミの分別',
     },
     navType: {
       default: 'menu',
