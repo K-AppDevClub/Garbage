@@ -60,6 +60,41 @@
   <v-ons-page>
     <navbar></navbar>
     <v-ons-card modifier="material">
+      <div style="font-size:0.8em; margin:0 0 5px;">あなたの地区では，もやせるごみが</div>
+      <div style="margin: 0 0 30px">
+        <span v-for="(select_region, $index) in select_regions" :key="select_region" tappable>
+          <label class="left">
+            <v-ons-radio
+              :input-id="'radio-' + $index"
+              :value="select_region"
+              v-model="region"
+            >
+            </v-ons-radio>
+          </label>
+          <label :for="'radio-' + $index" class="center">
+            {{ select_region }}
+          </label>
+        </span>
+      </div>
+      <div style="font-size:0.8em; margin:0 0 5px;">{{ getMonthName(calData.month) }}{{ calData.date }}日 {{ dayOfWeekStr }}曜，あなたの地区は</div>
+      <div v-if="region=='月曜と木曜'"><span style="color: red">{{ this.g_type1[this.calData.week] }}</span> のゴミ出しの日ですね！</div>
+      <div v-if="region=='火曜と金曜'"><span style="color: red">{{ this.g_type2[this.calData.week] }}</span> のゴミ出しの日ですね！</div>
+    </v-ons-card>
+    <v-ons-card modifier="material">
+      <div class="research">
+        <v-ons-input style="width:70%;margin:auto" name="code_ireru" v-model="gomidata" placeholder="分別したいゴミ"></v-ons-input>
+        <span><v-ons-button style="background-color:rgb(156, 20, 20)" @click="textClear()">クリア</v-ons-button></span>
+      </div>
+      <div>
+        <p>{{ calData.day }}</p>
+        <p>検索結果：{{this.gomidata}}</p>
+        <p></p>
+        <p v-if="separate.type != 'データがありません'">{{separate.type}}</p>
+        <p v-if="separate.cost != 'データがありません'">¥{{separate.cost}}</p>
+        <p v-else>”{{this.gomidata}}”は登録されていません</p>
+      </div>
+    </v-ons-card>
+    <!-- <v-ons-card modifier="material">
       <div id="calendar-nav">
         <i class="zmdi zmdi-arrow-left" tappable @click="moveLastMonth"></i>
         <span>{{calData.year}} - {{getMonthName(calData.month)}}</span>
@@ -83,20 +118,7 @@
         </table>
         </div>
       </div>
-    </v-ons-card>
-    <v-ons-card>
-      <div class="research">
-        <v-ons-input style="width:70%;margin:auto" name="code_ireru" v-model="gomidata" placeholder="分別したいゴミ"></v-ons-input>
-        <span><v-ons-button style="background-color:rgb(156, 20, 20)" @click="textClear()">クリア</v-ons-button></span>
-      </div>
-      <div>
-        <p>検索結果：{{this.gomidata}}</p>
-        <p></p>
-        <p v-if="separate.type != 'データがありません'">{{separate.type}}</p>
-        <p v-if="separate.cost != 'データがありません'">¥{{separate.cost}}</p>
-        <p v-else>”{{this.gomidata}}”は登録されていません</p>
-      </div>
-  </v-ons-card>
+    </v-ons-card> -->
   </v-ons-page>
 </template>
 
@@ -124,7 +146,7 @@ export default {
   },
   methods: {
     getMonthName: function(month) {
-      var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      var monthName = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
       return monthName[month - 1];
     },
     moveLastMonth: function() {
@@ -153,7 +175,13 @@ export default {
   data() {
     return {
       weeks: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      calData: {year: 0, month: 0},
+      calData: {year: 0, month: 0, date: 0, week: 0},
+      g_type1: ['もやせるごみ', '古紙／衣類', '金属 or 缶・瓶／PET or もやせないごみ', 'もやせるごみ', 'プラスチック容器類'],
+      g_type2: ['古紙／衣類', '金属 or 缶・瓶／PET or もやせないごみ', 'もやせるごみ', 'プラスチック容器類', 'もやせるごみ'],
+      type: '',
+      select_regions: ['月曜と木曜', '火曜と金曜'],
+      region: '月曜と木曜',
+      dayOfWeekStr: '',
       gomidata: '',
       result_type: '',
       result_cost: 0,
@@ -166,10 +194,14 @@ export default {
     var date = new Date();
     this.calData.year = date.getFullYear();
     this.calData.month = date.getMonth() + 1;
+    this.calData.date = date.getDate();
+    this.calData.week = date.getDay();
+    this.dayOfWeekStr = [ "日", "月", "火", "水", "木", "金", "土" ][this.calData.week];
   },
   mounted() {
     this.results = require("../../json/garbage.json");
     console.log(this.results);
+    this.type = this.g_type1[this.calData.week];
   },
   computed: {
     separate(){

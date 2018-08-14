@@ -31,7 +31,7 @@ export default {
   name: 'navbar',
   props: {
     msg: {
-      default: 'ゴミの分別',
+      default: 'ゴミの分別アプリ',
     },
     navType: {
       default: 'menu',
