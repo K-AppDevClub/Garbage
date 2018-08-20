@@ -77,8 +77,8 @@
         </span>
       </div>
       <div style="font-size:0.8em; margin:0 0 5px;">{{ getMonthName(calData.month) }}{{ calData.date }}日 {{ dayOfWeekStr }}曜，あなたの地区は</div>
-      <div v-if="region=='月曜と木曜'"><span style="color: red">{{ this.g_type1[this.calData.week] }}</span> のゴミ出しの日ですね！</div>
-      <div v-if="region=='火曜と金曜'"><span style="color: red">{{ this.g_type2[this.calData.week] }}</span> のゴミ出しの日ですね！</div>
+      <div v-if="region=='月曜と木曜'"><span style="color: red">{{ this.g_type1[this.calData.week] }}</span> です！</div>
+      <div v-if="region=='火曜と金曜'"><span style="color: red">{{ this.g_type2[this.calData.week] }}</span> です！</div>
     </v-ons-card>
     <v-ons-card modifier="material">
       <div class="research">
@@ -176,8 +176,8 @@ export default {
     return {
       weeks: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       calData: {year: 0, month: 0, date: 0, week: 0},
-      g_type1: ['もやせるごみ', '古紙／衣類', '金属 or 缶・瓶／PET or もやせないごみ', 'もやせるごみ', 'プラスチック容器類'],
-      g_type2: ['古紙／衣類', '金属 or 缶・瓶／PET or もやせないごみ', 'もやせるごみ', 'プラスチック容器類', 'もやせるごみ'],
+      g_type1: ['なし', 'もやせるごみ', '古紙／衣類', '金属 or 缶・瓶／PET or もやせないごみ', 'もやせるごみ', 'プラスチック容器類', 'なし'],
+      g_type2: ['なし', '古紙／衣類', '金属 or 缶・瓶／PET or もやせないごみ', 'もやせるごみ', 'プラスチック容器類', 'もやせるごみ', 'なし'],
       type: '',
       select_regions: ['月曜と木曜', '火曜と金曜'],
       region: '月曜と木曜',
