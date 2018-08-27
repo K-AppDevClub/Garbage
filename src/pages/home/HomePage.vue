@@ -82,16 +82,20 @@
     </v-ons-card>
     <v-ons-card modifier="material">
       <div class="research">
-        <v-ons-input style="width:70%;margin:auto" name="code_ireru" v-model="gomidata" placeholder="分別したいゴミ"></v-ons-input>
+        <v-ons-input style="width:70%;margin:auto" name="code_ireru" v-model="keyword" placeholder="分別したいゴミ"></v-ons-input>
         <span><v-ons-button style="background-color:rgb(156, 20, 20)" @click="textClear()">クリア</v-ons-button></span>
       </div>
       <div>
         <p>{{ calData.day }}</p>
-        <p>検索結果：{{this.gomidata}}</p>
-        <p></p>
-        <p v-if="separate.type != 'データがありません'">{{separate.type}}</p>
-        <p v-if="separate.cost != 'データがありません'">¥{{separate.cost}}</p>
-        <p v-else>”{{this.gomidata}}”は登録されていません</p>
+        <div v-if="keyword!=''">
+          <p v-if="separate.length==0">”{{this.keyword}}”は登録されていません</p>
+        </div>
+        <div v-for="s in separate" v-bind:key="s.id">
+          <h3>{{s.name}}</h3>
+          <p>種類：{{s.type}}</p>
+          <p>手数料：{{s.cost}}円</p>
+          <br>
+        </div>
       </div>
     </v-ons-card>
     <!-- <v-ons-card modifier="material">
@@ -168,7 +172,7 @@ export default {
       }
     },
     textClear(){
-      this.gomidata = ''
+      this.keyword = ''
     },
   },
 
@@ -182,12 +186,12 @@ export default {
       select_regions: ['月曜と木曜', '火曜と金曜'],
       region: '月曜と木曜',
       dayOfWeekStr: '',
-      gomidata: '',
+      keyword: '',
       result_type: '',
       result_cost: 0,
       sentiment_score: 0,
+      garbege_list: [],
       results: [],
-      result: [],
     };
   },
   created() {
@@ -199,29 +203,20 @@ export default {
     this.dayOfWeekStr = [ "日", "月", "火", "水", "木", "金", "土" ][this.calData.week];
   },
   mounted() {
-    this.results = require("../../json/garbage.json");
-    console.log(this.results);
+    this.garbege_list = require("../../json/garbage.json");
+    console.log(this.garbege_list);
     this.type = this.g_type1[this.calData.week];
   },
   computed: {
     separate(){
-      for (var g_data in this.results){
-        if (this.results[g_data].name == this.gomidata){
-          console.log(this.results[g_data].name);
-          console.log(this.results[g_data].type);
-          console.log(this.results[g_data].cost);
-          this.result_type = this.results[g_data].type
-          this.result_cost = this.results[g_data].cost
-          break;
-        }
-        else{
-          this.result_type = 'データがありません'
-          this.result_cost = 'データがありません'
+      if(this.keyword == "") return []
+      this.results = []
+      for (var g_data of this.garbege_list){
+        if (g_data.name.match(this.keyword)){
+          this.results.push(g_data)
         }
       }
-      this.result = {type: this.result_type, cost: this.result_cost}
-      return this.result
-      // return this.result_type;
+      return this.results
     },
     calendar () {
       // 1日の曜日
